@@ -2,30 +2,31 @@
 #include "fiducial_msgs/FiducialTransformArray.h"
 #include "std_msgs/Float64.h"
 
-#include "robot_msgs/mrkrDist.h"
-#include "robot_msgs/usDist.h"
+#include "robot_msgs/docking.h"
+#include "robot_msgs/navGoal.h"
+#include "robot_msgs/blth.h"
+
 
 using namespace std;
 
 
 
-void arduino_sub();
-void position_pub();
-void marker_docking();
+void blth_mode();
+void nav_mode();
+void docking_mode();
 void core_end();
 
 
 int marker_num;
+int mod=0;
 
 
-ros::ServiceClient *m_client; //marker client
-ros::ServiceClient *u_client; //ultrasonic client
+ros::ServiceClient *d_client; //docking client
 ros::ServiceClient *n_client; //navigation client
 ros::ServiceClient *b_client; //bluetooth client
 
-robot_msgs::mrkrPose mrkr_srv;
-robot_msgs::usPose us_srv;
-robot_msgs::navGoal nav_goal_srv;
+robot_msgs::docking dock_srv;
+robot_msgs::navGoal nav_srv;
 robot_msgs::blth blth_srv;
 
 
@@ -34,13 +35,11 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "robot_core_sys");
 	ros::NodeHandle nh;
 
-	ros::ServiceClient m_client_tmp = nh.serviceClient<robot_msgs::mrkrPose>("mrkr_pose_srvr");
-	ros::ServiceClient u_client_tmp = nh.serviceClient<robot_msgs::usPose>("us_pose_srvr");
+	ros::ServiceClient d_client_tmp = nh.serviceClient<robot_msgs::docking>("docking_srvr");
 	ros::ServiceClient n_client_tmp = nh.serviceClient<robot_msgs::navGoal>("nav_goal_srvr");
 	ros::ServiceClient b_client_tmp = nh.serviceClient<robot_msgs::blth>("bt_srvr");
 
-	m_client=&m_client_tmp;
-	u_client=&u_client_tmp;
+	d_client=&d_client_tmp;
 	n_client=&n_client_tmp;
 	b_client=&b_client_tmp;
 
@@ -58,17 +57,17 @@ int main(int argc, char **argv)
 		switch(mod)
 		{
 			case 1 :  	//arduino mod
-				arduino_sub();
+				blth_mode();
 			break;
 
 
 			case 2 :  	//nav mod
-				position_pub();
+				nav_mode();
 			break;
 
 
 			case 3:		//docking mod
-				marker_docking();
+				docking_mode();
 			break;
 
 
@@ -90,25 +89,38 @@ int main(int argc, char **argv)
 
 
 
-void arduino_sub();
+void blth_mode(robot_msgs::blth::Request &req, 
+			 robot_msgs::blth::Response&res)
 {
-	if(m_client->call(blth_srv)&&blth_srv.response.m_result)
+	if(b_client->call(blth_srv)&&blth_srv.response.blth_ok)
 	{
+		marker_num=blth_srv.response.mrkr_num;
+
 		ROS_INFO("");
 		mod=2;
 	}
 }
 
 
-void position_pub();
+void nav_mod(robot_msgs::navGoal::Request &req, 
+			 robot_msgs::navGoal::Response&res)
 {
-
+	if(n_client->call(nav_srv)&&nav_srv.response.nav_ok)
+	{
+		ROS_INFO("");
+		mod=3;
+	}
 }
 
 
-void marker_docking();
+void docking_mode(robot_msgs::docking::Request &req, 
+			 	  robot_msgs::docking::Response&res)
 {
-
+	if(d_client->call(dock_srv)&&dock_srv.response.dock_ok)
+	{
+		ROS_INFO("");
+		mod=4;
+	}
 }
 
 

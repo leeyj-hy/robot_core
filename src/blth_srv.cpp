@@ -1,27 +1,24 @@
 #include "ros/ros.h"
-#include "robot_msgs/usDist.h"
+#include "robot_msgs/blth.h"
 #include "std_msgs/Int64.h"
 
 
-void ultrasonic_pose(const std_msgs::Int64 &us_msg);
-bool distances(robot_msgs::usDist::Request &req, 
-			 robot_msgs::usDist::Response &res);
-using namespace std;
+void blth_num(const std_msgs::Int64 &received);//sub
+bool mrkr_num(robot_msgs::usDist::Request &req, 
+			 robot_msgs::usDist::Response &res);//server
 
-
-float ultrasonic_dist;
-//robot_msgs::usDist::Response &res;
+int mrkr_blth_num=0;
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "ultrasonic_server");
+    ros::init(argc, argv, "marker_server_bluetooth_sub");
     ros::NodeHandle nh;
 
-    ros::ServiceServer us_dist= nh.advertiseService("us_dist_srvr", distances);
+    ros::ServiceServer mrkr_srvr= nh.advertiseService("bt_srvr", mrkr_num);
 
-    ros::Subscriber sub = nh.subscribe("/chatter", 10, ultrasonic_pose);
+    ros::Subscriber sub = nh.subscribe("/chatter", 10, blth_num);
 
-    ROS_INFO("ready ultrasonic server!");
+    ROS_INFO("ready bluetooth server!");
 
     ros::spin();
 
@@ -29,20 +26,24 @@ int main(int argc, char **argv)
 }
 
 
-void ultrasonic_pose(const std_msgs::Float64 &us_msg)
+void blth_num(const std_msgs::Int64 &received)
 {
-	ultrasonic_dist=us_msg.data;
-	ROS_INFO("distance : %f",us_msg);
+	mrkr_blth_num=received.data;
+	ROS_INFO("marker number : %f",mrkr_blth_num);
 	
 }
 
-bool distances(robot_msgs::usDist::Request &req, 
-			 robot_msgs::usDist::Response &res)
+bool mrkr_num(robot_msgs::blth::Request &req, 
+			 robot_msgs::blth::Response &res)
 {
-	if(ultrasonic_dist<10)
-		res.u_result=true;
+	if(mrkr_blth_num>=100 &&mrkr_blth_num<120)
+	{
+		res.mrkr_num=mrkr_blth_num;
+		res.blth_ok=true;
+	}
+		
 	else
-		res.u_result=false;
+		res.blth_ok=false;
 
 	return true;
 }
