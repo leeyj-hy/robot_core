@@ -4,10 +4,10 @@
 #include "robot_msgs/docking.h"
 
 void marker_3d_pose(const fiducial_msgs::FiducialTransformArray &msg);
-bool docking_seq(robot_msgs::usDist::Request &req, 
-			 	robot_msgs::usDist::Response &res);
+bool docking_seq(robot_msgs::docking::Request &req, 
+			 	robot_msgs::docking::Response &res);
 
-ros::Publisher* robot_mv
+ros::Publisher* robot_mv;
 
 float mrkr_z_dist;
 
@@ -50,8 +50,8 @@ void marker_3d_pose(const fiducial_msgs::FiducialTransformArray &msg)
 }
 
 
-bool docking_seq(robot_msgs::usDist::Request &req, 
-			 robot_msgs::usDist::Response &res)
+bool docking_seq(robot_msgs::docking::Request &req, 
+			 robot_msgs::docking::Response &res)
 {
 
 	geometry_msgs::Twist robot_move;
@@ -65,5 +65,5 @@ bool docking_seq(robot_msgs::usDist::Request &req,
 				robot_move.linear.x = 0;
 			}
 
-	    chatter_pub->publish(robot_move);
+	    robot_mv->publish(robot_move);
 }

@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	ros::Publisher goal_pose_tmp = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 10);
 	ros::ServiceServer nav_srv = nh.advertiseService("nav_goal_srvr", when_nav_call);
 
-	goal_pose= &goal_pose_tmp
+	goal_pose= &goal_pose_tmp;
 	ros::Rate loop_rate(1);
 
 
@@ -62,7 +62,7 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 
 		else if(i==0)
 		{
-			goal_pose.publish(goal_pose_yj);
+			goal_pose->publish(goal_pose_yj);
 
 			ROS_INFO("goal_pose published!");
 		}

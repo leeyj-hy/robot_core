@@ -89,8 +89,7 @@ int main(int argc, char **argv)
 
 
 
-void blth_mode(robot_msgs::blth::Request &req, 
-			 robot_msgs::blth::Response&res)
+void blth_mode()
 {
 	if(b_client->call(blth_srv)&&blth_srv.response.blth_ok)
 	{
@@ -102,8 +101,7 @@ void blth_mode(robot_msgs::blth::Request &req,
 }
 
 
-void nav_mod(robot_msgs::navGoal::Request &req, 
-			 robot_msgs::navGoal::Response&res)
+void nav_mode()
 {
 	if(n_client->call(nav_srv)&&nav_srv.response.nav_ok)
 	{
@@ -113,8 +111,7 @@ void nav_mod(robot_msgs::navGoal::Request &req,
 }
 
 
-void docking_mode(robot_msgs::docking::Request &req, 
-			 	  robot_msgs::docking::Response&res)
+void docking_mode()
 {
 	if(d_client->call(dock_srv)&&dock_srv.response.dock_ok)
 	{

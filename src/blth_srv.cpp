@@ -1,11 +1,11 @@
 #include "ros/ros.h"
 #include "robot_msgs/blth.h"
-#include "std_msgs/Int64.h"
+#include "std_msgs/Int16.h"
 
 
-void blth_num(const std_msgs::Int64 &received);//sub
-bool mrkr_num(robot_msgs::usDist::Request &req, 
-			 robot_msgs::usDist::Response &res);//server
+void blth_num(const std_msgs::Int16 &received);//sub
+bool mrkr_num(robot_msgs::blth::Request &req, 
+			 robot_msgs::blth::Response &res);//server
 
 int mrkr_blth_num=0;
 
@@ -26,10 +26,10 @@ int main(int argc, char **argv)
 }
 
 
-void blth_num(const std_msgs::Int64 &received)
+void blth_num(const std_msgs::Int16 &received)
 {
 	mrkr_blth_num=received.data;
-	ROS_INFO("marker number : %f",mrkr_blth_num);
+	ROS_INFO("marker number : %ds",mrkr_blth_num);
 	
 }
 
