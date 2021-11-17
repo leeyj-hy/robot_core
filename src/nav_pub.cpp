@@ -86,6 +86,7 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 void nav_result(const move_base_msgs::MoveBaseActionResult &is_nav_ok )
 {
 	nav_status = is_nav_ok.status.status;
+	ROS_INFO("%d", nav_status);
 
 	
 }
