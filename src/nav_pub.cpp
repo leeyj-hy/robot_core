@@ -1,13 +1,17 @@
 #include <ros/ros.h>
+#include "move_base_msgs/MoveBaseResult.h"
 #include "move_base_msgs/MoveBaseActionGoal.h"
+#include "move_base_msgs/MoveBaseActionResult.h"
+#include "actionlib_msgs/GoalStatus.h"
 #include "robot_msgs/navGoal.h"
 
+void nav_result(const move_base_msgs::MoveBaseActionResult &is_nav_ok );
 bool when_nav_call(robot_msgs::navGoal::Request &req, 
 			 	  robot_msgs::navGoal::Response &res);
 int i=6;
 
 ros::Publisher* goal_pose;
-
+int nav_status=0;
 
 int main(int argc, char** argv)
 {
@@ -16,6 +20,7 @@ int main(int argc, char** argv)
 	ros::NodeHandle nh;
 
 	ros::Publisher goal_pose_tmp = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 10);
+	ros::Subscriber result_sub = nh.subscribe("/move_base_msgs/MoveBaseResult", 10, nav_result);
 	ros::ServiceServer nav_srv = nh.advertiseService("nav_goal_srvr", when_nav_call);
 
 	goal_pose= &goal_pose_tmp;
@@ -70,5 +75,17 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 		else
 		{
 			ROS_INFO("published!");
+			if(nav_status==3)
+			{
+				res.nav_ok=true;
+				return true;
+			}
 		}
+}
+
+void nav_result(const move_base_msgs::MoveBaseActionResult &is_nav_ok )
+{
+	nav_status = is_nav_ok.status.status;
+
+	
 }

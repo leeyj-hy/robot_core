@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0.2)
 project(robot_core)
 
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
   move_base_msgs
   fiducial_msgs
   geometry_msgs

@@ -58,21 +58,25 @@ int main(int argc, char **argv)
 		{
 			case 1 :  	//arduino mod
 				blth_mode();
+				ROS_INFO("blth_mode");
 			break;
 
 
 			case 2 :  	//nav mod
 				nav_mode();
+				ROS_INFO("nav_mode");
 			break;
 
 
 			case 3:		//docking mod
 				docking_mode();
+				ROS_INFO("docking_mode");
 			break;
 
 
 			case 4:		//core end
 				core_end();
+				ROS_INFO("core_end");
 			break;
 
 			default:
