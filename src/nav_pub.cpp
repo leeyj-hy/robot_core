@@ -54,8 +54,8 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 	goal_pose_yj.goal.target_pose.header.frame_id="map";
 	goal_pose_yj.goal.target_pose.pose.position.x=3.9;
 	goal_pose_yj.goal.target_pose.pose.position.y=5.89;
-	goal_pose_yj.goal.target_pose.pose.orientation.z=0.1131;
-	goal_pose_yj.goal.target_pose.pose.orientation.w=1;
+	goal_pose_yj.goal.target_pose.pose.orientation.z=0.78;
+	goal_pose_yj.goal.target_pose.pose.orientation.w=0.62;
 
 
 	i-=1;
