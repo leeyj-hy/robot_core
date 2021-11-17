@@ -1,5 +1,15 @@
 <launch>
+	<include file="$(find omo_nav_launch_yj)/launch/omo_nav_launch_yj.launch"/>
 
+	<node pkg="robot_core" type="robot_core_sys" name="robot_core_sys" output="screen"/>
+
+	<node pkg="robot_core" type="blth_srv" name="blth_srv" output="screen"/>
+
+	<node pkg="robot_core" type="nav_pub" name="nav_pub" output="screen"/>
+
+
+
+	<node pkg="rosserial_python" type="serial_node.py" name="rosserial" output="screen" args="/dev/ttyACM0"/>
 
 
 </launch>
