@@ -20,16 +20,10 @@ int main(int argc, char** argv)
 	ros::NodeHandle nh;
 
 	ros::Publisher goal_pose_tmp = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 10);
-	ros::Subscriber result_sub = nh.subscribe("/move_base_msgs/MoveBaseResult", 10, nav_result);
 	ros::ServiceServer nav_srv = nh.advertiseService("nav_goal_srvr", when_nav_call);
 
 	goal_pose= &goal_pose_tmp;
 	ros::Rate loop_rate(1);
-
-
-
-
-
 
 	ROS_INFO("nav_ready!");
 
@@ -72,21 +66,20 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 			ROS_INFO("goal_pose published!");
 		}
 
-		else
+		else if(i==-1)
 		{
 			ROS_INFO("published!");
-			if(nav_status==3)
-			{
-				res.nav_ok=true;
-				return true;
-			}
+		}
+
+		else if(i==-25)
+		{
+			res.nav_ok=true;
+			return true;
+		}
+		
+		else
+		{
+			return true;
 		}
 }
 
-void nav_result(const move_base_msgs::MoveBaseActionResult &is_nav_ok )
-{
-	nav_status = is_nav_ok.status.status;
-	ROS_INFO("%d", nav_status);
-
-	
-}
