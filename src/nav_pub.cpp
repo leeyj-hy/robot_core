@@ -71,12 +71,12 @@ bool when_nav_call(robot_msgs::navGoal::Request &req,
 			ROS_INFO("published!");
 		}
 
-		else if(i==-25)
+		else if(i==-35)
 		{
 			res.nav_ok=true;
 			return true;
 		}
-		
+
 		else
 		{
 			return true;
